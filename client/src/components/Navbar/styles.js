@@ -18,7 +18,7 @@ export default makeStyles((theme) => ({
     color: theme.palette.primary.main,
     textDecoration: 'none',
     fontSize: '2em',
-    fontWeight: 300,
+    fontWeight: 600,
   },
   image: {
     marginLeft: '10px',
@@ -54,6 +54,7 @@ export default makeStyles((theme) => ({
   brandContainer: {
     display: 'flex',
     alignItems: 'center',
+    textDecoration: 'none',
   },
   purple: {
     color: theme.palette.getContrastText(deepPurple[500]),

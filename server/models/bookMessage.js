@@ -1,9 +1,12 @@
 import mongoose from 'mongoose';
 
-const postSchema = mongoose.Schema({
+const bookSchema = mongoose.Schema({
     title: String,
-    message: String,
+    number: String,
     name: String,
+    college: String,
+    year: String,
+    branch: String,
     creator: String,
     tags: [String],
     selectedFile: String,
@@ -14,6 +17,6 @@ const postSchema = mongoose.Schema({
     },
 })
 
-var PostMessage = mongoose.model('PostMessage', postSchema);
+var BookMessage = mongoose.model('BookMessage', bookSchema);
 
-export default PostMessage;
+export default BookMessage;

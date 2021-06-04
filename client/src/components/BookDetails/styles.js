@@ -4,9 +4,11 @@ export default makeStyles((theme) => ({
   media: {
     borderRadius: '20px',
     objectFit: 'cover',
-    width: '100%',
-    maxHeight: '600px',
-
+    minWidth: '40vw',
+    maxHeight: '400px',
+    [theme.breakpoints.down('sm')]: {
+      minWidth: '75vw',
+    },
   },
   card: {
     display: 'flex',
@@ -15,6 +17,13 @@ export default makeStyles((theme) => ({
       flexWrap: 'wrap',
       flexDirection: 'column',
     },
+  },
+  cardsmall: {
+    marginLeft: '0px',
+    margin: '15px',
+    padding: '7px',
+    borderRadius: '5px',
+    position: 'relative',
   },
   section: {
     borderRadius: '20px',
@@ -32,5 +41,8 @@ export default makeStyles((theme) => ({
     [theme.breakpoints.down('sm')]: {
       flexDirection: 'column',
     },
+  },
+  loadingPaper: {
+    display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '20px', borderRadius: '15px', height: '39vh',
   },
 }));

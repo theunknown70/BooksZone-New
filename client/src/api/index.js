@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API = axios.create({ baseURL: 'https://memories-project-part4.herokuapp.com/' });
+const API = axios.create({ baseURL: 'http://localhost:5000' });
 
 API.interceptors.request.use((req) => {
   if (localStorage.getItem('profile')) {
@@ -10,13 +10,13 @@ API.interceptors.request.use((req) => {
   return req;
 });
 
-export const fetchPost = (id) => API.get(`/posts/${id}`);
-export const fetchPosts = (page) => API.get(`/posts?page=${page}`);
-export const fetchPostsBySearch = (searchQuery) => API.get(`/posts/search?searchQuery=${searchQuery.search || 'none'}&tags=${searchQuery.tags}`);
-export const createPost = (newPost) => API.post('/posts', newPost);
-export const likePost = (id) => API.patch(`/posts/${id}/likePost`);
-export const updatePost = (id, updatedPost) => API.patch(`/posts/${id}`, updatedPost);
-export const deletePost = (id) => API.delete(`/posts/${id}`);
+export const fetchBook = (id) => API.get(`/books/${id}`);
+export const fetchBooks = (page) => API.get(`/books?page=${page}`);
+export const fetchBooksBySearch = (searchQuery) => API.get(`/books/search?searchQuery=${searchQuery.search || 'none'}&tags=${searchQuery.tags}`);
+export const createBook = (newBook) => API.post('/books', newBook);
+export const likeBook = (id) => API.patch(`/books/${id}/likeBook`);
+export const updateBook = (id, updatedBook) => API.patch(`/books/${id}`, updatedBook);
+export const deleteBook = (id) => API.delete(`/books/${id}`);
 
 export const signIn = (formData) => API.post('/user/signin', formData);
 export const signUp = (formData) => API.post('/user/signup', formData);

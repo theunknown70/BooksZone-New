@@ -21,6 +21,12 @@ export default makeStyles({
     height: '100%',
     position: 'relative',
   },
+  cardsmall: {
+    margin: '15px',
+    padding: '7px',
+    borderRadius: '5px',
+    position: 'relative',
+  },
   overlay: {
     position: 'absolute',
     top: '20px',
@@ -39,10 +45,11 @@ export default makeStyles({
   details: {
     display: 'flex',
     justifyContent: 'space-between',
-    margin: '20px',
+    margin: 0,
+    padding: 0,
   },
   title: {
-    padding: '0 16px',
+    padding: '5px 16px 0px 16px',
   },
   cardActions: {
     padding: '0 16px 8px 16px',

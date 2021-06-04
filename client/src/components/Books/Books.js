@@ -2,21 +2,21 @@ import React from 'react';
 import { Grid, CircularProgress } from '@material-ui/core';
 import { useSelector } from 'react-redux';
 
-import Post from './Post/Post';
+import Book from './Book/Book';
 import useStyles from './styles';
 
-const Posts = ({ setCurrentId }) => {
-  const { posts, isLoading } = useSelector((state) => state.posts);
+const Books = ({ setCurrentId }) => {
+  const { books, isLoading } = useSelector((state) => state.books);
   const classes = useStyles();
 
-  if (!posts.length && !isLoading) return 'No posts';
+  if (!books.length && !isLoading) return 'No books';
 
   return (
     isLoading ? <CircularProgress /> : (
       <Grid className={classes.container} container alignItems="stretch" spacing={3}>
-        {posts?.map((post) => (
-          <Grid key={post._id} item xs={12} sm={12} md={6} lg={3}>
-            <Post post={post} setCurrentId={setCurrentId} />
+        {books?.map((book) => (
+          <Grid key={book._id} item xs={12} sm={12} md={6} lg={3}>
+            <Book book={book} setCurrentId={setCurrentId} />
           </Grid>
         ))}
       </Grid>
@@ -24,4 +24,4 @@ const Posts = ({ setCurrentId }) => {
   );
 };
 
-export default Posts;
+export default Books;
