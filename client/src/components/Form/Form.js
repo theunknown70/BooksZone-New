@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Typography, Paper } from '@material-ui/core';
+import { TextField, Button, Typography, Paper, InputLabel, Select, FormControl } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import FileBase from 'react-file-base64';
 import { useHistory } from 'react-router-dom';
@@ -9,7 +9,7 @@ import { createBook, updateBook } from '../../actions/books';
 import useStyles from './styles';
 
 const Form = ({ currentId, setCurrentId }) => {
-  const [bookData, setBookData] = useState({ title: '', number: '', college: '', year: '', branch: '', tags: [], selectedFile: '' });
+  const [bookData, setBookData] = useState({ price: '', location: '', college: '', year: '', branch: '', tags: [], selectedFile: '' });
   const book = useSelector((state) => (currentId ? state.books.books.find((message) => message._id === currentId) : null));
   const dispatch = useDispatch();
   const classes = useStyles();
@@ -18,11 +18,11 @@ const Form = ({ currentId, setCurrentId }) => {
 
   const clear = () => {
     setCurrentId(0);
-    setBookData({ title: '', number: '', college: '', year: '', branch: '', tags: [], selectedFile: '' });
+    setBookData({ price: '', location: '', college: '', year: '', branch: '', tags: [], selectedFile: '' });
   };
 
   useEffect(() => {
-    if (!book?.title) clear();
+    if (!book?.price) clear();
     if (book) setBookData(book);
   }, [book]);
 
@@ -58,24 +58,85 @@ const Form = ({ currentId, setCurrentId }) => {
 
   return (
     <Paper className={classes.paper} elevation={6}>
-      <form autoComplete="off" noValidate className={`${classes.root} ${classes.form}`} onSubmit={handleSubmit}>
-        <Typography variant="h6">{currentId ? `Editing "${book?.title}"` : 'Creating a Book'}</Typography>
-        <TextField name="title" variant="outlined" label="Price" fullWidth value={bookData.title} onChange={(e) => setBookData({ ...bookData, title: e.target.value })} />
-        <TextField name="number" variant="outlined" label="Number" fullWidth value={bookData.number} onChange={(e) => setBookData({ ...bookData, number: e.target.value })} />
-        <TextField name="college" variant="outlined" label="College" fullWidth value={bookData.college} onChange={(e) => setBookData({ ...bookData, college: e.target.value })} />
-        <TextField name="year" variant="outlined" label="Year" fullWidth value={bookData.year} onChange={(e) => setBookData({ ...bookData, year: e.target.value })} />
-        <TextField name="branch" variant="outlined" label="Branch" fullWidth value={bookData.branch} onChange={(e) => setBookData({ ...bookData, branch: e.target.value })} />
-        <div style={{ padding: '5px 0', width: '94%' }}>
+      <form autoComplete="off" validate className={`${classes.root} ${classes.form}`} onSubmit={handleSubmit}>
+      <Typography variant="h6">{currentId ? `Editing "${book?.price}"` : 'Creating a Book'}</Typography>
+      <FormControl required variant="outlined" className={classes.formControl}>
+        <InputLabel htmlFor="college">College</InputLabel>
+        <Select
+          native
+          value={bookData.college}
+          onChange={(e) => setBookData({ ...bookData, college: e.target.value })}
+          name="college" 
+          label="College" 
+          fullWidth 
+          inputProps={{
+            id: 'college',
+          }}
+        >
+          <option aria-label="None" value="" />
+          <option value="VJTI">VJTI</option>
+        </Select>
+      </FormControl>
+      <FormControl required variant="outlined" className={classes.formControl}>
+        <InputLabel htmlFor="year">Year</InputLabel>
+        <Select
+          native
+          value={bookData.year}
+          onChange={(e) => setBookData({ ...bookData, year: e.target.value })}
+          name="year" 
+          label="Year" 
+          fullWidth 
+          inputProps={{
+            id: 'year',
+          }}
+        >
+          <option aria-label="None" value="" />
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+        </Select>
+        </FormControl>
+        <FormControl required variant="outlined" className={classes.formControl}>
+        <InputLabel htmlFor="branch">Branch</InputLabel>
+        <Select
+          native
+          value={bookData.branch}
+          onChange={(e) => setBookData({ ...bookData, branch: e.target.value })}
+          name="branch" 
+          label="Branch" 
+          fullWidth 
+          inputProps={{
+            id: 'branch',
+          }}
+        >
+          <option aria-label="None" value="" />
+          <option value="CS">CS</option>
+          <option value="IT">IT</option>
+          <option value="Electronics">Electronics</option>
+          <option value="ExTC">ExTC</option>
+          <option value="Mechanical">Mechanical</option>
+          <option value="Production">Production</option>
+          <option value="Electrical">Electrical</option>
+          <option value="Civil">Civil</option>
+          <option value="Textile">Textile</option>
+        </Select>
+        </FormControl>
+        <div style={{ padding: '5px 0', width: '96%' }}>
           <ChipInput
             name="tags"
             variant="outlined"
-            label="Enter Your Books"
+            label="Enter Your Books *"
             fullWidth
-            value={bookData.tags}
+            value={bookData.tags} 
+            newChipKeys={['Enter', ' ', ',', '.']} 
+            blurBehavior='add' 
             onAdd={(chip) => handleAddChip(chip)}
-            onDelete={(chip) => handleDeleteChip(chip)}
+            onDelete={(chip) => handleDeleteChip(chip)} 
           />
         </div>
+        <TextField type="number" required name="price" variant="outlined" label="Price" fullWidth value={bookData.price} onChange={(e) => setBookData({ ...bookData, price: e.target.value })} />
+        <TextField required name="location" variant="outlined" label="Location" fullWidth value={bookData.location} onChange={(e) => setBookData({ ...bookData, location: e.target.value })} />
         <div className={classes.fileInput}><FileBase type="file" multiple={false} onDone={({ base64 }) => setBookData({ ...bookData, selectedFile: base64 })} /></div>
         <Button className={classes.buttonSubmit} variant="contained" color="primary" size="large" type="submit" fullWidth>Submit</Button>
         <Button variant="contained" color="secondary" size="small" onClick={clear} fullWidth>Clear</Button>

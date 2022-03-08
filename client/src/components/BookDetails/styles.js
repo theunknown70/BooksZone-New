@@ -5,9 +5,11 @@ export default makeStyles((theme) => ({
     borderRadius: '20px',
     objectFit: 'cover',
     minWidth: '40vw',
+    maxWidth: '40vw',
     maxHeight: '400px',
     [theme.breakpoints.down('sm')]: {
       minWidth: '75vw',
+      maxWidth: '75vw',
     },
   },
   card: {
@@ -22,8 +24,16 @@ export default makeStyles((theme) => ({
     marginLeft: '0px',
     margin: '15px',
     padding: '7px',
+    width: '100%',
     borderRadius: '5px',
     position: 'relative',
+  },
+  root: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    '& > *': {
+      margin: theme.spacing(0.5),
+    },
   },
   section: {
     borderRadius: '20px',
@@ -36,7 +46,7 @@ export default makeStyles((theme) => ({
       marginLeft: 0,
     },
   },
-  recommendedPosts: {
+  recommendedBooks: {
     display: 'flex',
     [theme.breakpoints.down('sm')]: {
       flexDirection: 'column',

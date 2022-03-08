@@ -41,13 +41,15 @@ const Navbar = () => {
       <Link to="/" className={classes.brandContainer}>
         {/* <img component={Link} to="/" src={memoriesText} alt="icon" height="45px" /> */}
         <Typography className={classes.heading} variant="h2" align="center">BooksZone</Typography>
-        <img className={classes.image} src={memoriesLogo} alt="icon" height="40px" />
+        <img className={classes.image} src={memoriesLogo} alt="icon" height="40px" />&nbsp;&nbsp;
+        <Button component={Link} to="/" variant="contained" color="primary">Home</Button>
       </Link>
       <Toolbar className={classes.toolbar}>
         {user?.result ? (
           <div className={classes.profile}>
             <Avatar className={classes.purple} alt={user?.result.name} src={user?.result.imageUrl}>{user?.result.name.charAt(0)}</Avatar>
             <Typography className={classes.userName} variant="h6">{user?.result.name}</Typography>
+            <Button component={Link} to="/chats" variant="outlined" color="primary">Chats</Button>
             <Button variant="contained" className={classes.logout} color="secondary" onClick={logout}>Logout</Button>
           </div>
         ) : (

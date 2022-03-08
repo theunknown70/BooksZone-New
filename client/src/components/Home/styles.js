@@ -17,4 +17,8 @@ export default makeStyles((theme) => ({
       flexDirection: 'column-reverse',
     },
   },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: '96%',
+  },
 }));

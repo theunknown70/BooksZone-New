@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardActions, CardContent, CardMedia, Button, Typography, ButtonBase } from '@material-ui/core/';
+import { Card, CardActions, CardContent, CardMedia, Button, Typography, ButtonBase, Chip } from '@material-ui/core/';
 import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
 import DeleteIcon from '@material-ui/icons/Delete';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
@@ -45,10 +45,13 @@ const Book = ({ book, setCurrentId }) => {
         className={classes.cardAction}
         onClick={openBook}
       >
-        <CardMedia className={classes.media} image={book.selectedFile || 'https://user-images.githubusercontent.com/194400/49531010-48dad180-f8b1-11e8-8d89-1e61320e1d82.png'} title={book.title} />
+        <CardMedia className={classes.media} image={book.selectedFile || 'https://user-images.githubusercontent.com/194400/49531010-48dad180-f8b1-11e8-8d89-1e61320e1d82.png'} title={book.price} />
         <div className={classes.overlay}>
           <Typography variant="h6">{book.name}</Typography>
           <Typography variant="body2">{moment(book.createdAt).fromNow()}</Typography>
+        </div>
+        <div className={classes.overlay3}>
+          <Typography variant="body2">{book.location}</Typography>
         </div>
         {(user?.result?.googleId === book?.creator || user?.result?._id === book?.creator) && (
         <div className={classes.overlay2} name="edit">
@@ -73,9 +76,11 @@ const Book = ({ book, setCurrentId }) => {
         <Card className={classes.cardsmall} raised elevation={3}>
           <Typography variant="body2" color="textSecondary" component="h2">{`Branch: ${book.branch}`}</Typography>
         </Card>
-        <Typography className={classes.title} gutterBottom variant="h5" component="h2">{`₹${book.title} /-`}</Typography>
+        <Typography className={classes.title} gutterBottom variant="h5" component="h2">{`₹${book.price} /-`}</Typography>
         <CardContent>
-          <Typography className={classes.title} variant="body2" color="textSecondary" component="p">{book.tags.map((tag) => `${tag}, `)}</Typography>
+          <div className={classes.root}>
+          {book.tags.map((tag) => <Chip color="primary" variant="outlined" size="small" label={tag} />)}
+          </div>  
         </CardContent>
       </ButtonBase>
       <CardActions className={classes.cardActions}>

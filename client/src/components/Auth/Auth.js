@@ -4,18 +4,20 @@ import { Avatar, Button, Paper, Grid, Typography, Container } from '@material-ui
 import { useHistory } from 'react-router-dom';
 import { GoogleLogin } from 'react-google-login';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import axios from 'axios';
 
 import Icon from './icon';
 import { signin, signup } from '../../actions/auth';
 import { AUTH } from '../../constants/actionTypes';
 import useStyles from './styles';
-import Input from './Input';
 
 const initialState = { firstName: '', lastName: '', email: '', password: '', confirmPassword: '' };
 
 const SignUp = () => {
   const [form, setForm] = useState(initialState);
   const [isSignup, setIsSignup] = useState(false);
+  const [ loading, setLoading ] = useState(true)
+  // const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
   const dispatch = useDispatch();
   const history = useHistory();
   const classes = useStyles();
@@ -39,14 +41,57 @@ const SignUp = () => {
     }
   };
 
+  async function getFile(url) {
+    let response = await fetch(url);
+    let data = await response.blob();
+    return new File([data], "test.jpg", { type: 'image/jpeg' });
+  }
+
   const googleSuccess = async (res) => {
     const result = res?.profileObj;
     const token = res?.tokenId;
 
     try {
-      dispatch({ type: AUTH, data: { result, token } });
+      await dispatch({ type: AUTH, data: { result, token } });
 
       history.push('/');
+
+      // if (!user || user === null) {
+      //   return
+      // }
+      const user = JSON.parse(localStorage.getItem('profile'));
+
+      axios.get(
+        'https://api.chatengine.io/users/me/',
+        { headers: { 
+          "project-id": `${process.env.REACT_APP_PROJECT_ID}`,
+          "user-name": user?.result?.name,
+          "user-secret": user?.result?.googleId
+        }}
+      )
+  
+      .then(() => setLoading(false))
+  
+      .catch(e => {
+        let formdata = new FormData()
+        formdata.append('email', user?.result?.email)
+        formdata.append('username', user?.result?.name)
+        formdata.append('secret', user?.result?.googleId)
+  
+        getFile(user?.result?.imageUrl)
+        .then(avatar => {
+          formdata.append('avatar', avatar, avatar.name)
+  
+          axios.post(
+            'https://api.chatengine.io/users/',
+            formdata,
+            { headers: { "private-key": `${process.env.REACT_APP_PRIVATE_KEY}` }}
+          )
+          .then(() => setLoading(false))
+          .catch(e => console.log('e', e.response))
+        })
+      })
+      // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     } catch (error) {
       console.log(error);
     }
@@ -63,7 +108,7 @@ const SignUp = () => {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">{ isSignup ? 'Sign up' : 'Sign in' }</Typography>
-        <form className={classes.form} onSubmit={handleSubmit}>
+        {/* <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             { isSignup && (
             <>
@@ -77,9 +122,10 @@ const SignUp = () => {
           </Grid>
           <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
             { isSignup ? 'Sign Up' : 'Sign In' }
-          </Button>
+          </Button> */}
+          <Grid className={classes.form} container spacing={2}>
           <GoogleLogin
-            clientId="564033717568-bu2nr1l9h31bhk9bff4pqbenvvoju3oq.apps.googleusercontent.com"
+            clientId="405841535069-5ivvh3rvi9mt8f1g9ne5fg97vftlfl5j.apps.googleusercontent.com"
             render={(renderProps) => (
               <Button className={classes.googleButton} color="primary" fullWidth onClick={renderProps.onClick} disabled={renderProps.disabled} startIcon={<Icon />} variant="contained">
                 Google Sign In
@@ -89,14 +135,15 @@ const SignUp = () => {
             onFailure={googleError}
             cookiePolicy="single_host_origin"
           />
-          <Grid container justify="flex-end">
+          </Grid>
+          {/* <Grid container justify="flex-end">
             <Grid item>
               <Button onClick={switchMode}>
                 { isSignup ? 'Already have an account? Sign in' : "Don't have an account? Sign Up" }
               </Button>
             </Grid>
           </Grid>
-        </form>
+        </form> */}
       </Paper>
     </Container>
   );

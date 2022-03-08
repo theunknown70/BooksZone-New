@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-export default makeStyles({
+export default makeStyles((theme) => ({
   media: {
     height: 0,
     paddingTop: '56.25%',
@@ -27,6 +27,13 @@ export default makeStyles({
     borderRadius: '5px',
     position: 'relative',
   },
+  root: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    '& > *': {
+      margin: theme.spacing(0.5),
+    },
+  },
   overlay: {
     position: 'absolute',
     top: '20px',
@@ -37,6 +44,12 @@ export default makeStyles({
     position: 'absolute',
     top: '20px',
     right: '20px',
+    color: 'white',
+  },
+  overlay3: {
+    position: 'absolute',
+    top: '115px',
+    left: '20px',
     color: 'white',
   },
   grid: {
@@ -60,4 +73,4 @@ export default makeStyles({
     display: 'block',
     textAlign: 'initial',
   },
-});
+}));

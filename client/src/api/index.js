@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API = axios.create({ baseURL: 'http://localhost:5000' });
+const API = axios.create({ baseURL: 'https://collegebooks.herokuapp.com/' });
 
 API.interceptors.request.use((req) => {
   if (localStorage.getItem('profile')) {
@@ -12,7 +12,7 @@ API.interceptors.request.use((req) => {
 
 export const fetchBook = (id) => API.get(`/books/${id}`);
 export const fetchBooks = (page) => API.get(`/books?page=${page}`);
-export const fetchBooksBySearch = (searchQuery) => API.get(`/books/search?searchQuery=${searchQuery.search || 'none'}&tags=${searchQuery.tags}`);
+export const fetchBooksBySearch = (searchQuery) => API.get(`/books/search?branchQuery=${searchQuery.branch || 'none'}&yearQuery=${searchQuery.year || 'none'}&tags=${searchQuery.tags}`);
 export const createBook = (newBook) => API.post('/books', newBook);
 export const likeBook = (id) => API.patch(`/books/${id}/likeBook`);
 export const updateBook = (id, updatedBook) => API.patch(`/books/${id}`, updatedBook);

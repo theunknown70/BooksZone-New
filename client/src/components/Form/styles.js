@@ -7,6 +7,10 @@ export default makeStyles((theme) => ({
       margin: theme.spacing(1),
     },
   },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: '96%',
+  },
   paper: {
     padding: theme.spacing(2),
   },
