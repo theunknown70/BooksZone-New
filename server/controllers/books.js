@@ -22,16 +22,39 @@ export const getBooks = async (req, res) => {
 }
 
 export const getBooksBySearch = async (req, res) => {
-    const { searchQuery, tags } = req.query;
-
+    const { branchQuery, yearQuery, tags } = req.query;
+    if (branchQuery !== 'none' && yearQuery !== 'none' && tags) {
     try {
-        const title = new RegExp(searchQuery, "i");
+        const branch = new RegExp(branchQuery, "i");
 
-        const books = await BookMessage.find({ $or: [ { title }, { tags: { $in: tags.split(',') } } ]});
+        const books = await BookMessage.find({ $and: [ { branch }, { year: yearQuery }, { tags: { $in: tags.split(',') } } ]});
 
         res.json({ data: books });
     } catch (error) {    
         res.status(404).json({ message: error.message });
+    }
+    }
+    else if (branchQuery == 'none' && yearQuery == 'none' && tags) {
+        try {
+            const branch = new RegExp(branchQuery, "i");
+            
+            const books = await BookMessage.find({ $or: [ { branch }, { tags: { $in: tags.split(',') } } ]});
+    
+            res.json({ data: books });
+        } catch (error) {    
+            res.status(404).json({ message: error.message });
+        }
+    }
+    else if (!tags) {
+        try {
+            const branch = new RegExp(branchQuery, "i");
+            
+            const books = await BookMessage.find({ $and: [ { branch }, { year: yearQuery } ]});
+    
+            res.json({ data: books });
+        } catch (error) {    
+            res.status(404).json({ message: error.message });
+        }
     }
 }
 
@@ -63,15 +86,17 @@ export const createBook = async (req, res) => {
 
 export const updateBook = async (req, res) => {
     const { id } = req.params;
-    const { title, number, creator, selectedFile, tags, college, year, branch } = req.body;
+    const { price, location, creator, selectedFile, tags, college, year, branch } = req.body;
     
     if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No book with id: ${id}`);
 
-    const updatedBook = { creator, title, number, tags, selectedFile, college, year, branch, _id: id };
+    const updatedBook = { creator, price, location, tags, selectedFile, college, year, branch, _id: id };
 
     await BookMessage.findByIdAndUpdate(id, updatedBook, { new: true });
 
-    res.json(updatedBook);
+    const updatedBookFull = await BookMessage.findById(id);
+
+    res.json(updatedBookFull);
 }
 
 export const deleteBook = async (req, res) => {
@@ -95,7 +120,7 @@ export const likeBook = async (req, res) => {
     
     const book = await BookMessage.findById(id);
 
-    const index = book.likes.findIndex((id) => id ===String(req.userId));
+    const index = book.likes.findIndex((id) => id === String(req.userId));
 
     if (index === -1) {
       book.likes.push(req.userId);
